@@ -27,31 +27,75 @@ def search(title):
     params = {"apikey": API_KEY, "t": title}
     response = requests.get(BASE_URL, params=params).json()
     if response["Response"] == "True":
-        if response["Type"] == "movie":
-            console.print(f"[bold green]{response['Title']} ({response['Year']})[/]")
-            console.print(f"Director: {response['Director']}")
-            console.print(f"IMDb ID: {response['imdbID']}")
+        t = response["Type"]
+
+        title = response.get("Title", "N/A")
+        year = response.get("Year", "N/A")
+        genre = response.get("Genre", "N/A")
+        runtime = response.get("Runtime", "N/A")
+        language = response.get("Language", "N/A")
+        country = response.get("Country", "N/A")
+        awards = response.get("Awards", "N/A")
+        poster = response.get("Poster", "N/A")
+        plot = response.get("Plot", "N/A")
+        imdb_id = response.get("imdbID", "N/A")
+        imdb_rating = response.get("imdbRating", "N/A")
+        imdb_votes = response.get("imdbVotes", "N/A")
+        ratings = response.get("Ratings", [])
+        actors = response.get("Actors", "N/A")
+        writer = response.get("Writer", "N/A")
+        director = response.get("Director", "N/A")
+        box_office = response.get("BoxOffice", "N/A")
+        metascore = response.get("Metascore", "N/A")
+
+        if t == "movie":
+            console.print(f"[bold green]{title} ({year})[/]")
+            console.print(f"[bold]Genre:[/] {genre}")
+            console.print(f"[bold]Runtime:[/] {runtime}")
+            console.print(f"[bold]Language:[/] {language}")
+            console.print(f"[bold]Country:[/] {country}")
+            console.print(f"[bold]Director:[/] {director}")
+            console.print(f"[bold]Writer:[/] {writer}")
+            console.print(f"[bold]Actors:[/] {actors}")
+            console.print(f"[bold]IMDb ID:[/] {imdb_id}")
+            console.print(f"[bold]IMDb Rating:[/] {imdb_rating} ({imdb_votes} votes)")
+            console.print(f"[bold]Metascore:[/] {metascore}")
+            console.print(f"[bold]Box Office:[/] {box_office}")
+            console.print(f"[bold]Awards:[/] {awards}")
+            if poster and poster != "N/A":
+                console.print(f"[bold]Poster:[/] {poster}")
             console.print()
-            console.print("[bold]Ratings:[/]")
-            for rating in response.get("Ratings", []):
-                console.print(f"• [cyan]{rating['Source']}[/]: {rating['Value']}")
+            if ratings:
+                console.print("[bold]Ratings:[/]")
+                for rating in ratings:
+                    console.print(f"• [cyan]{rating['Source']}[/]: {rating['Value']}")
+                console.print()
+            console.print(f"[bold]Plot:[/] {plot}")
+        elif t == "series":
+            total_seasons = response.get("totalSeasons", "N/A")
+            console.print(f"[bold green]{title} ({year})[/]")
+            console.print(f"[bold]Genre:[/] {genre}")
+            console.print(f"[bold]Runtime:[/] {runtime}")
+            console.print(f"[bold]Language:[/] {language}")
+            console.print(f"[bold]Country:[/] {country}")
+            console.print(f"[bold]Writer:[/] {writer}")
+            console.print(f"[bold]Actors:[/] {actors}")
+            console.print(f"[bold]IMDb ID:[/] {imdb_id}")
+            console.print(f"[bold]IMDb Rating:[/] {imdb_rating} ({imdb_votes} votes)")
+            console.print(f"[bold]Total Seasons:[/] {total_seasons}")
+            console.print(f"[bold]Awards:[/] {awards}")
+            if poster and poster != "N/A":
+                console.print(f"[bold]Poster:[/] {poster}")
             console.print()
-            console.print(f"[bold]Plot:[/] {response['Plot']}")
-        elif response["Type"] == "series":
-            console.print(f"[bold green]{response['Title']} ({response['Year']})[/]")
-            console.print(f"Total Seasons: {response['totalSeasons']}")
-            console.print(f"IMDb ID: {response['imdbID']}")
-            console.print()
-            console.print("[bold]Ratings:[/]")
-            for rating in response.get("Ratings", []):
-                console.print(f"• [cyan]{rating['Source']}[/]: {rating['Value']}")
-            console.print()
-            console.print(f"[bold]Plot:[/] {response['Plot']}")
+            if ratings:
+                console.print("[bold]Ratings:[/]")
+                for rating in ratings:
+                    console.print(f"• [cyan]{rating['Source']}[/]: {rating['Value']}")
+                console.print()
+            console.print(f"[bold]Plot:[/] {plot}")
         else:
-            console.print(f"[bold yellow]Type: {response['Type']}[/]")
-            console.print(
-                f"Title: {response['Title']}, Year: {response['Year']}, IMDb ID: {response['imdbID']}"
-            )
+            console.print(f"[bold yellow]Type: {t}[/]")
+            console.print(f"Title: {title}, Year: {year}, IMDb ID: {imdb_id}")
     else:
         console.print("[bold red]Title not found![/]")
 
