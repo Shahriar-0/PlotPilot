@@ -1,0 +1,40 @@
+{
+    "Title": "Spider-Man: Across the Spider-Verse",
+    "Year": "2023",
+    "Rated": "PG",
+    "Released": "02 Jun 2023",
+    "Runtime": "140 min",
+    "Genre": "Animation, Action, Adventure",
+    "Director": "Joaquim Dos Santos, Kemp Powers, Justin K. Thompson",
+    "Writer": "Phil Lord, Christopher Miller, Dave Callaham",
+    "Actors": "Shameik Moore, Hailee Steinfeld, Brian Tyree Henry",
+    "Plot": "Traveling across the multiverse, Miles Morales meets a new team of Spider-People, made up of heroes from different dimensions. But when the heroes clash over how to deal with a new threat, Miles finds himself at a crossroads.",
+    "Language": "English",
+    "Country": "United States",
+    "Awards": "Nominated for 1 Oscar. 106 wins & 164 nominations total",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BNThiZjA3MjItZGY5Ni00ZmJhLWEwN2EtOTBlYTA4Y2E0M2ZmXkEyXkFqcGc@._V1_SX300.jpg",
+    "Ratings": [
+        {
+            "Source": "Internet Movie Database",
+            "Value": "8.5/10"
+        },
+        {
+            "Source": "Rotten Tomatoes",
+            "Value": "95%"
+        },
+        {
+            "Source": "Metacritic",
+            "Value": "86/100"
+        }
+    ],
+    "Metascore": "86",
+    "imdbRating": "8.5",
+    "imdbVotes": "468,141",
+    "imdbID": "tt9362722",
+    "Type": "movie",
+    "DVD": "N/A",
+    "BoxOffice": "$381,593,754",
+    "Production": "N/A",
+    "Website": "N/A",
+    "Response": "True"
+}

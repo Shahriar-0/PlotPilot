@@ -1,0 +1,71 @@
+{
+    "Title": "Money Heist",
+    "Season": "1",
+    "totalSeasons": "5",
+    "Episodes": [
+        {
+            "Title": "Efectuar lo acordado",
+            "Released": "2017-05-02",
+            "Episode": "1",
+            "imdbRating": "8.1",
+            "imdbID": "tt6807344"
+        },
+        {
+            "Title": "Imprudencias letales",
+            "Released": "2017-05-09",
+            "Episode": "2",
+            "imdbRating": "8.2",
+            "imdbID": "tt6798708"
+        },
+        {
+            "Title": "Errar al disparar",
+            "Released": "2017-05-16",
+            "Episode": "3",
+            "imdbRating": "8.1",
+            "imdbID": "tt6851488"
+        },
+        {
+            "Title": "Caballo de Troya",
+            "Released": "2017-05-23",
+            "Episode": "4",
+            "imdbRating": "N/A",
+            "imdbID": "tt6851490"
+        },
+        {
+            "Title": "El día de la marmota",
+            "Released": "2017-05-30",
+            "Episode": "5",
+            "imdbRating": "8.2",
+            "imdbID": "tt6851492"
+        },
+        {
+            "Title": "La cálida Guerra Fría",
+            "Released": "2017-06-06",
+            "Episode": "6",
+            "imdbRating": "8.1",
+            "imdbID": "tt6851494"
+        },
+        {
+            "Title": "Refrigerada inestabilidad",
+            "Released": "2017-06-13",
+            "Episode": "7",
+            "imdbRating": "N/A",
+            "imdbID": "tt6851496"
+        },
+        {
+            "Title": "Tú lo has buscado",
+            "Released": "2017-06-20",
+            "Episode": "8",
+            "imdbRating": "N/A",
+            "imdbID": "tt6851500"
+        },
+        {
+            "Title": "El que la sigue la consigue",
+            "Released": "2017-06-27",
+            "Episode": "9",
+            "imdbRating": "8.5",
+            "imdbID": "tt6851502"
+        }
+    ],
+    "Response": "True"
+}
