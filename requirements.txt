@@ -1,0 +1,6 @@
+click
+requests
+rich
+python-dotenv
+Pillow
+img2unicode
