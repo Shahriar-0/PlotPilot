@@ -159,6 +159,7 @@ def ratings(imdb_id, season):
     title = response["Title"]
 
     all_season_boxes = []  # List of lists, each inner list is a season's boxes
+    season_averages = []
     max_episodes = 0
     for s in range(1, total_seasons + 1):
         params = {"apikey": API_KEY, "i": imdb_id, "season": s}
@@ -166,6 +167,7 @@ def ratings(imdb_id, season):
         if resp["Response"] == "True" and "Episodes" in resp:
             episodes = resp["Episodes"]
             season_boxes = []
+            ratings = []
             for ep in episodes:
                 if ep["imdbRating"] != "N/A":
                     try:
@@ -173,6 +175,7 @@ def ratings(imdb_id, season):
                         rating = float(ep["imdbRating"])
                         color = get_color(rating)
                         box = format_box(f"Ep {ep_num}: {rating:.3f}", color)
+                        ratings.append(rating)
                     except Exception:
                         box = format_box(f"Ep --: N/A")
                 else:
@@ -181,13 +184,19 @@ def ratings(imdb_id, season):
             all_season_boxes.append(season_boxes)
             if len(season_boxes) > max_episodes:
                 max_episodes = len(season_boxes)
+            if ratings:
+                avg = sum(ratings) / len(ratings)
+                season_averages.append(avg)
+            else:
+                season_averages.append(None)
         else:
             all_season_boxes.append([format_box("Ep --: N/A")])
+            season_averages.append(None)
 
     box_width = 15
     header = "  ".join(
         [
-            f"[bold underline]{('Season ' + str(s)):<{box_width}}[/]"
+            f"[bold underline]{('Season ' + str(s) + (f' ({season_averages[s-1]:.2f})' if season_averages[s-1] is not None else ' (N/A)')):<{box_width}}[/]"
             for s in range(1, total_seasons + 1)
         ]
     )
