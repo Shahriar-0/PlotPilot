@@ -1,70 +1,84 @@
 {
-    "Title": "Money Heist",
+    "Title": "Rick and Morty",
     "Season": "1",
-    "totalSeasons": "5",
+    "totalSeasons": "8",
     "Episodes": [
         {
-            "Title": "Efectuar lo acordado",
-            "Released": "2017-05-02",
+            "Title": "Pilot",
+            "Released": "2013-12-02",
             "Episode": "1",
-            "imdbRating": "8.1",
-            "imdbID": "tt6807344"
+            "imdbRating": "7.9",
+            "imdbID": "tt2169080"
         },
         {
-            "Title": "Imprudencias letales",
-            "Released": "2017-05-09",
+            "Title": "Lawnmower Dog",
+            "Released": "2013-12-09",
             "Episode": "2",
-            "imdbRating": "8.2",
-            "imdbID": "tt6798708"
+            "imdbRating": "8.6",
+            "imdbID": "tt3333824"
         },
         {
-            "Title": "Errar al disparar",
-            "Released": "2017-05-16",
+            "Title": "Anatomy Park",
+            "Released": "2013-12-16",
             "Episode": "3",
-            "imdbRating": "8.1",
-            "imdbID": "tt6851488"
+            "imdbRating": "8.3",
+            "imdbID": "tt3333828"
         },
         {
-            "Title": "Caballo de Troya",
-            "Released": "2017-05-23",
+            "Title": "M. Night Shaym-Aliens!",
+            "Released": "2014-01-13",
             "Episode": "4",
-            "imdbRating": "N/A",
-            "imdbID": "tt6851490"
+            "imdbRating": "8.6",
+            "imdbID": "tt3333830"
         },
         {
-            "Title": "El día de la marmota",
-            "Released": "2017-05-30",
+            "Title": "Meeseeks and Destroy",
+            "Released": "2014-01-20",
             "Episode": "5",
-            "imdbRating": "8.2",
-            "imdbID": "tt6851492"
+            "imdbRating": "9.0",
+            "imdbID": "tt3333832"
         },
         {
-            "Title": "La cálida Guerra Fría",
-            "Released": "2017-06-06",
+            "Title": "Rick Potion #9",
+            "Released": "2014-01-27",
             "Episode": "6",
-            "imdbRating": "8.1",
-            "imdbID": "tt6851494"
+            "imdbRating": "9.0",
+            "imdbID": "tt3333834"
         },
         {
-            "Title": "Refrigerada inestabilidad",
-            "Released": "2017-06-13",
+            "Title": "Raising Gazorpazorp",
+            "Released": "2014-03-10",
             "Episode": "7",
-            "imdbRating": "N/A",
-            "imdbID": "tt6851496"
+            "imdbRating": "7.9",
+            "imdbID": "tt3333836"
         },
         {
-            "Title": "Tú lo has buscado",
-            "Released": "2017-06-20",
+            "Title": "Rixty Minutes",
+            "Released": "2014-03-17",
             "Episode": "8",
-            "imdbRating": "N/A",
-            "imdbID": "tt6851500"
+            "imdbRating": "8.7",
+            "imdbID": "tt3333838"
         },
         {
-            "Title": "El que la sigue la consigue",
-            "Released": "2017-06-27",
+            "Title": "Something Ricked This Way Comes",
+            "Released": "2014-03-24",
             "Episode": "9",
-            "imdbRating": "8.5",
-            "imdbID": "tt6851502"
+            "imdbRating": "8.4",
+            "imdbID": "tt3333840"
+        },
+        {
+            "Title": "Close Rick-Counters of the Rick Kind",
+            "Released": "2014-04-07",
+            "Episode": "10",
+            "imdbRating": "9.3",
+            "imdbID": "tt3333846"
+        },
+        {
+            "Title": "Ricksy Business",
+            "Released": "2014-04-14",
+            "Episode": "11",
+            "imdbRating": "8.4",
+            "imdbID": "tt3333854"
         }
     ],
     "Response": "True"

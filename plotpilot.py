@@ -2,9 +2,19 @@ import os
 import click
 import requests
 from rich.console import Console
+from rich.text import Text
+from rich.layout import Layout
 from rich.table import Table
-import plotille
+import shutil
+import io
 from dotenv import load_dotenv
+
+try:
+    from PIL import Image
+    from img2unicode import Renderer
+except ImportError:
+    Image = None
+    Renderer = None
 
 load_dotenv()
 
@@ -23,11 +33,19 @@ def cli():
 @cli.command()
 @click.argument("title")
 def search(title):
-    """Search for a movie or series by title and display detailed information."""
+    """Search for a movie or series by title and display detailed information with poster."""
+    if Image is None or Renderer is None:
+        console.print(
+            "[bold yellow]Warning: PIL or img2unicode not installed. Poster image will not be displayed.[/]"
+        )
+
     params = {"apikey": API_KEY, "t": title}
     response = requests.get(BASE_URL, params=params).json()
+
     if response["Response"] == "True":
         t = response["Type"]
+
+        text_info = Text()
 
         title = response.get("Title", "N/A")
         year = response.get("Year", "N/A")
@@ -36,7 +54,6 @@ def search(title):
         language = response.get("Language", "N/A")
         country = response.get("Country", "N/A")
         awards = response.get("Awards", "N/A")
-        poster = response.get("Poster", "N/A")
         plot = response.get("Plot", "N/A")
         imdb_id = response.get("imdbID", "N/A")
         imdb_rating = response.get("imdbRating", "N/A")
@@ -44,58 +61,70 @@ def search(title):
         ratings = response.get("Ratings", [])
         actors = response.get("Actors", "N/A")
         writer = response.get("Writer", "N/A")
-        director = response.get("Director", "N/A")
-        box_office = response.get("BoxOffice", "N/A")
-        metascore = response.get("Metascore", "N/A")
+
+        text_info.append(f"{title} ({year})\n", style="bold green")
+        text_info.append(f"Genre: {genre}\n", style="bold")
+        text_info.append(f"Runtime: {runtime}\n", style="bold")
+        text_info.append(f"Language: {language}\n", style="bold")
+        text_info.append(f"Country: {country}\n", style="bold")
+        text_info.append(f"Writer: {writer}\n", style="bold")
+        text_info.append(f"Actors: {actors}\n", style="bold")
+        text_info.append(f"IMDb ID: {imdb_id}\n", style="bold")
+        text_info.append(
+            f"IMDb Rating: {imdb_rating} ({imdb_votes} votes)\n", style="bold"
+        )
+        text_info.append(f"Awards: {awards}\n", style="bold")
 
         if t == "movie":
-            console.print(f"[bold green]{title} ({year})[/]")
-            console.print(f"[bold]Genre:[/] {genre}")
-            console.print(f"[bold]Runtime:[/] {runtime}")
-            console.print(f"[bold]Language:[/] {language}")
-            console.print(f"[bold]Country:[/] {country}")
-            console.print(f"[bold]Director:[/] {director}")
-            console.print(f"[bold]Writer:[/] {writer}")
-            console.print(f"[bold]Actors:[/] {actors}")
-            console.print(f"[bold]IMDb ID:[/] {imdb_id}")
-            console.print(f"[bold]IMDb Rating:[/] {imdb_rating} ({imdb_votes} votes)")
-            console.print(f"[bold]Metascore:[/] {metascore}")
-            console.print(f"[bold]Box Office:[/] {box_office}")
-            console.print(f"[bold]Awards:[/] {awards}")
-            if poster and poster != "N/A":
-                console.print(f"[bold]Poster:[/] {poster}")
-            console.print()
-            if ratings:
-                console.print("[bold]Ratings:[/]")
-                for rating in ratings:
-                    console.print(f"• [cyan]{rating['Source']}[/]: {rating['Value']}")
-                console.print()
-            console.print(f"[bold]Plot:[/] {plot}")
+            director = response.get("Director", "N/A")
+            box_office = response.get("BoxOffice", "N/A")
+            metascore = response.get("Metascore", "N/A")
+            text_info.append(f"Director: {director}\n", style="bold")
+            text_info.append(f"Metascore: {metascore}\n", style="bold")
+            text_info.append(f"Box Office: {box_office}\n", style="bold")
         elif t == "series":
             total_seasons = response.get("totalSeasons", "N/A")
-            console.print(f"[bold green]{title} ({year})[/]")
-            console.print(f"[bold]Genre:[/] {genre}")
-            console.print(f"[bold]Runtime:[/] {runtime}")
-            console.print(f"[bold]Language:[/] {language}")
-            console.print(f"[bold]Country:[/] {country}")
-            console.print(f"[bold]Writer:[/] {writer}")
-            console.print(f"[bold]Actors:[/] {actors}")
-            console.print(f"[bold]IMDb ID:[/] {imdb_id}")
-            console.print(f"[bold]IMDb Rating:[/] {imdb_rating} ({imdb_votes} votes)")
-            console.print(f"[bold]Total Seasons:[/] {total_seasons}")
-            console.print(f"[bold]Awards:[/] {awards}")
-            if poster and poster != "N/A":
-                console.print(f"[bold]Poster:[/] {poster}")
-            console.print()
-            if ratings:
-                console.print("[bold]Ratings:[/]")
-                for rating in ratings:
-                    console.print(f"• [cyan]{rating['Source']}[/]: {rating['Value']}")
-                console.print()
-            console.print(f"[bold]Plot:[/] {plot}")
+            text_info.append(f"Total Seasons: {total_seasons}\n", style="bold")
+
+        if ratings:
+            text_info.append("Ratings:\n", style="bold")
+            for rating in ratings:
+                text_info.append(
+                    f"• {rating['Source']}: {rating['Value']}\n", style="cyan"
+                )
+        text_info.append(f"\nPlot: {plot}\n", style="bold")
+
+        # Handle poster image
+        poster_url = response.get("Poster", "N/A")
+        image_text = None
+        if poster_url != "N/A" and Image is not None and Renderer is not None:
+            try:
+                response = requests.get(poster_url)
+                response.raise_for_status()  # Check for HTTP errors
+                image_data = io.BytesIO(response.content)
+                image = Image.open(image_data)
+                renderer = Renderer()
+                image_str = renderer.render_terminal(image) # FIXME
+                image_text = Text.from_ansi(image_str)
+            except Exception as e:
+                console.print(f"[bold yellow]Could not display poster: {e}[/]")
+
+        terminal_width = shutil.get_terminal_size().columns
+        if terminal_width > 100 and image_text is not None:
+            # Side-by-side layout
+            layout = Layout()
+            layout.split_row(
+                Layout(name="left"),
+                Layout(name="right", size=40),
+            )
+            layout["left"].update(text_info)
+            layout["right"].update(image_text)
+            console.print(layout)
         else:
-            console.print(f"[bold yellow]Type: {t}[/]")
-            console.print(f"Title: {title}, Year: {year}, IMDb ID: {imdb_id}")
+            # Vertical layout (text above image or text only)
+            console.print(text_info)
+            if image_text is not None:
+                console.print(image_text)
     else:
         console.print("[bold red]Title not found![/]")
 
@@ -104,7 +133,7 @@ def search(title):
 @click.argument("imdb_id")
 def synopsis(imdb_id):
     """Fetch the full synopsis for a movie or series."""
-    params = {"apikey": API_KEY, "i": imdb_id, "plot": "full"}
+    params = {"apikey": API_KEY, "t": imdb_id, "plot": "full"}
     response = requests.get(BASE_URL, params=params).json()
     if response["Response"] == "True":
         console.print(f"[bold cyan]{response['Title']}\nSynopsis[/]")
@@ -118,16 +147,30 @@ def synopsis(imdb_id):
 @click.option("--season", default=1, help="Season number")
 def episodes(imdb_id, season):
     """List episode summaries and ratings for a series."""
-    params = {"apikey": API_KEY, "i": imdb_id, "season": season}
+    params = {"apikey": API_KEY, "t": imdb_id, "season": season}
     response = requests.get(BASE_URL, params=params).json()
     if response["Response"] == "True" and "Episodes" in response:
-        table = Table(title=f"{response['Title']} - Season {season}")
+        table = Table(title=f"{response.get('Title', 'N/A')} - Season {season}")
         table.add_column("Episode", style="cyan")
         table.add_column("Title", style="magenta")
+        table.add_column("Released", style="yellow")
         table.add_column("Rating", style="green")
+        table.add_column("IMDb ID", style="blue")
         table.add_column("Summary", style="white")
         for ep in response["Episodes"]:
-            table.add_row(ep["Episode"], ep["Title"], ep["imdbRating"], ep["Plot"])
+            episode_num = ep.get("Episode", "N/A")
+            title = ep.get("Title", "N/A")
+            released = ep.get("Released", "N/A")
+            rating = ep.get("imdbRating", "N/A")
+            ep_imdb_id = ep.get("imdbID", "N/A")
+            summary = "N/A"
+            if ep_imdb_id != "N/A":
+                detail_params = {"apikey": API_KEY, "i": ep_imdb_id, "plot": "full"}
+                detail_resp = requests.get(BASE_URL, params=detail_params).json()
+                summary = detail_resp.get("Plot", "N/A")
+            table.add_row(
+                str(episode_num), title, released, rating, ep_imdb_id, summary
+            )
         console.print(table)
     else:
         console.print("[bold red]No episodes found![/]")
@@ -139,7 +182,7 @@ def episodes(imdb_id, season):
     "--season", default=None, type=int, help="Season number (if omitted, show all)"
 )
 def ratings(imdb_id, season):
-    """Visualize episode rating distribution for a series. If no season is provided, show all seasons in columns."""
+    """Visualize episode rating distribution for a series."""
 
     def get_color(rating):
         if rating >= 9.0:
@@ -161,9 +204,8 @@ def ratings(imdb_id, season):
         else:
             return f"[dim]{text:<{width}}[/]"
 
-    # If season is provided, show only that season
     if season is not None:
-        params = {"apikey": API_KEY, "i": imdb_id, "season": season}
+        params = {"apikey": API_KEY, "t": imdb_id, "season": season}
         response = requests.get(BASE_URL, params=params).json()
         if response["Response"] == "True" and "Episodes" in response:
             episodes = response["Episodes"]
@@ -189,8 +231,7 @@ def ratings(imdb_id, season):
             console.print("[bold red]No ratings found![/]")
         return
 
-    # If no season is provided, show all seasons in columns
-    params = {"apikey": API_KEY, "i": imdb_id}
+    params = {"apikey": API_KEY, "t": imdb_id}
     response = requests.get(BASE_URL, params=params).json()
     if response["Response"] != "True" or response.get("Type") != "series":
         console.print("[bold red]Series not found![/]")
@@ -202,11 +243,11 @@ def ratings(imdb_id, season):
         return
     title = response["Title"]
 
-    all_season_boxes = []  # List of lists, each inner list is a season's boxes
+    all_season_boxes = []
     season_averages = []
     max_episodes = 0
     for s in range(1, total_seasons + 1):
-        params = {"apikey": API_KEY, "i": imdb_id, "season": s}
+        params = {"apikey": API_KEY, "t": imdb_id, "season": s}
         resp = requests.get(BASE_URL, params=params).json()
         if resp["Response"] == "True" and "Episodes" in resp:
             episodes = resp["Episodes"]
@@ -221,7 +262,7 @@ def ratings(imdb_id, season):
                         box = format_box(f"Ep {ep_num}: {rating:.3f}", color)
                         ratings.append(rating)
                     except Exception:
-                        box = format_box(f"Ep --: N/A")
+                        box = format_box("Ep --: N/A")
                 else:
                     box = format_box(f"Ep {ep['Episode']}: N/A")
                 season_boxes.append(box)

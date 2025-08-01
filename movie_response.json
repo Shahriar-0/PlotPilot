@@ -1,26 +1,26 @@
 {
-    "Title": "Spider-Man: Across the Spider-Verse",
-    "Year": "2023",
-    "Rated": "PG",
-    "Released": "02 Jun 2023",
-    "Runtime": "140 min",
-    "Genre": "Animation, Action, Adventure",
-    "Director": "Joaquim Dos Santos, Kemp Powers, Justin K. Thompson",
-    "Writer": "Phil Lord, Christopher Miller, Dave Callaham",
-    "Actors": "Shameik Moore, Hailee Steinfeld, Brian Tyree Henry",
-    "Plot": "Traveling across the multiverse, Miles Morales meets a new team of Spider-People, made up of heroes from different dimensions. But when the heroes clash over how to deal with a new threat, Miles finds himself at a crossroads.",
-    "Language": "English",
-    "Country": "United States",
-    "Awards": "Nominated for 1 Oscar. 106 wins & 164 nominations total",
-    "Poster": "https://m.media-amazon.com/images/M/MV5BNThiZjA3MjItZGY5Ni00ZmJhLWEwN2EtOTBlYTA4Y2E0M2ZmXkEyXkFqcGc@._V1_SX300.jpg",
+    "Title": "Persona",
+    "Year": "1966",
+    "Rated": "Not Rated",
+    "Released": "16 Mar 1967",
+    "Runtime": "83 min",
+    "Genre": "Drama, Thriller",
+    "Director": "Ingmar Bergman",
+    "Writer": "Ingmar Bergman",
+    "Actors": "Bibi Andersson, Liv Ullmann, Margaretha Krook",
+    "Plot": "A nurse is put in charge of a mute actress and finds that their personae are melding together.",
+    "Language": "Swedish, English",
+    "Country": "Sweden",
+    "Awards": "Nominated for 1 BAFTA Award8 wins & 4 nominations total",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BYTRhNzkzMDktZDNlNi00MDIwLWFiNjAtNTlmYjZjYWZlMTEzXkEyXkFqcGc@._V1_SX300.jpg",
     "Ratings": [
         {
             "Source": "Internet Movie Database",
-            "Value": "8.5/10"
+            "Value": "8.0/10"
         },
         {
             "Source": "Rotten Tomatoes",
-            "Value": "95%"
+            "Value": "91%"
         },
         {
             "Source": "Metacritic",
@@ -28,12 +28,12 @@
         }
     ],
     "Metascore": "86",
-    "imdbRating": "8.5",
-    "imdbVotes": "468,141",
-    "imdbID": "tt9362722",
+    "imdbRating": "8.0",
+    "imdbVotes": "136,946",
+    "imdbID": "tt0060827",
     "Type": "movie",
     "DVD": "N/A",
-    "BoxOffice": "$381,593,754",
+    "BoxOffice": "N/A",
     "Production": "N/A",
     "Website": "N/A",
     "Response": "True"
