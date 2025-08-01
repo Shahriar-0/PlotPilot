@@ -13,10 +13,12 @@ console = Console()
 API_KEY = os.getenv("OMDB_API_KEY")
 BASE_URL = "http://www.omdbapi.com/"
 
+
 @click.group()
 def cli():
     """PlotPilot: Explore movie and series data in your terminal."""
     pass
+
 
 @cli.command()
 @click.argument("title")
@@ -47,9 +49,12 @@ def search(title):
             console.print(f"[bold]Plot:[/] {response['Plot']}")
         else:
             console.print(f"[bold yellow]Type: {response['Type']}[/]")
-            console.print(f"Title: {response['Title']}, Year: {response['Year']}, IMDb ID: {response['imdbID']}")
+            console.print(
+                f"Title: {response['Title']}, Year: {response['Year']}, IMDb ID: {response['imdbID']}"
+            )
     else:
         console.print("[bold red]Title not found![/]")
+
 
 @cli.command()
 @click.argument("imdb_id")
@@ -62,6 +67,7 @@ def synopsis(imdb_id):
         console.print(response["Plot"])
     else:
         console.print("[bold red]Invalid IMDb ID![/]")
+
 
 @cli.command()
 @click.argument("imdb_id")
@@ -82,6 +88,7 @@ def episodes(imdb_id, season):
     else:
         console.print("[bold red]No episodes found![/]")
 
+
 @cli.command()
 @click.argument("imdb_id")
 @click.option("--season", default=1, help="Season number")
@@ -91,13 +98,38 @@ def ratings(imdb_id, season):
     response = requests.get(BASE_URL, params=params).json()
     if response["Response"] == "True" and "Episodes" in response:
         episodes = response["Episodes"]
-        ratings = [float(ep["imdbRating"]) for ep in episodes if ep["imdbRating"] != "N/A"]
-        ep_numbers = [int(ep["Episode"]) for ep in episodes if ep["imdbRating"] != "N/A"]
-        fig = plotille.scatter(ep_numbers, ratings, height=10, width=50, X_label="Episode", Y_label="Rating")
-        console.print(f"[bold yellow]{response['Title']} - Season {season} Rating Distribution[/]")
-        console.print(fig)
+        ratings_data = [
+            (int(ep["Episode"]), float(ep["imdbRating"]))
+            for ep in episodes
+            if ep["imdbRating"] != "N/A"
+        ]
+        if not ratings_data:
+            console.print("[bold red]No ratings found![/]")
+            return
+        console.print(
+            f"[bold yellow]{response['Title']} - Season {season} Rating Distribution[/]"
+        )
+        boxes = []
+        for ep_num, rating in ratings_data:
+            if rating >= 9.0:
+                color = "dark_green"
+            elif rating >= 8.0:
+                color = "green"
+            elif rating >= 7.0:
+                color = "cyan"
+            elif rating >= 6.0:
+                color = "yellow"
+            elif rating >= 5.0:
+                color = "magenta"
+            else:
+                color = "red"
+            box = f"[bold {color}]Ep {ep_num}: {rating:.3f}[/]"
+            boxes.append(box)
+        for i in range(0, len(boxes)):
+            console.print("  ".join(boxes[i : i + 1]))
     else:
         console.print("[bold red]No ratings found![/]")
+
 
 if __name__ == "__main__":
     cli()
