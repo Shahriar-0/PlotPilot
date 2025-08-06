@@ -21,7 +21,7 @@ load_dotenv()
 console = Console()
 
 API_KEY = os.getenv("OMDB_API_KEY")
-BASE_URL = "http://www.omdbapi.com/"
+BASE_URL = "https://www.omdbapi.com/"
 
 
 @click.group()
@@ -104,7 +104,7 @@ def search(title):
                 image_data = io.BytesIO(response.content)
                 image = Image.open(image_data)
                 renderer = Renderer()
-                image_str = renderer.render_terminal(image) # FIXME
+                image_str = renderer.render_terminal(image)  # FIXME
                 image_text = Text.from_ansi(image_str)
             except Exception as e:
                 console.print(f"[bold yellow]Could not display poster: {e}[/]")
